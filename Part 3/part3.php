@@ -24,17 +24,18 @@
 
     $context  = stream_context_create($options);
     $result = file_get_contents($url, false, $context);
-    echo($result);
+    $output = json_decode($result, true);
+
+    $commission = round((int)substr($output['commission'], 0, strlen($output['commission'])) * $output['amount'] / 100, 2);
+    echo("Associate " . $output['associate'] . " earned $" . $commission . "\r\n");
 
     $to = "z1861317@students.niu.edu";
-            $subject = "This is subject";
+            $subject = "Order " . $output['order'] . "has been processed";
             
-            $message = "<b>This is HTML message.</b>";
-            $message .= "<h1>This is headline.</h1>";
+            $message = ("Your order #" . $output['order'] . " for $" . $output['amount'] . " has been processed on " . $output['processDay'] . "\r\n");
+            echo($message);
             
             $header = "From:abc@somedomain.com \r\n";
-            $header .= "Cc:afgh@somedomain.com \r\n";
-            $header .= "MIME-Version: 1.0\r\n";
             $header .= "Content-type: text/html\r\n";
             
             $retval = mail ($to,$subject,$message,$header);
