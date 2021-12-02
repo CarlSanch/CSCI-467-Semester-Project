@@ -7,28 +7,30 @@ Database = quote_database
 
 Tables (assuming multiple quotes per company):
 
-***NOTE: Quote_ID automatically increments, no need to assign a value.
-
 quote_info 
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Company_ID | Quote_ID | Company_Name | Company_City | Company_Street | Contact_Info | Email | Associate_Name | Date_of_Quote | Sanctioned |
 ---------------------------------------------------------------------------------------------------------------------------------------------
-    int         int        varchar(255)  varchar(255)    varchar(255)    varchar(255)  varchar(255) varchar(255) varchar(255)  Boolean (0 = false)
+    int         int        varchar(255)  varchar(255)    varchar(255)    varchar(255)  varchar(255) varchar(255) varchar(255)    Boolean (anything != 0 == True)
+  NOT_NULL    NOT_NULL     NOT_NULL       NOT_NULL        NOT_NULL        NOT_NULL     NOT_NULL     NOT_NULL      NOT_NULL       DEFAULT = 0
     
 quote_item_info
 -------------------------------------------------------------------
 | Company_ID | Quote_ID | Line_ID | Item_Description | Item_Price |
 -------------------------------------------------------------------
    int          int        int        varchar(255)      float
+   NOT_NULL    NOT_NULL   NOT_NULL   NOT_NULL           NOT_NULL 
    
 quote_final_price
 ---------------------------------------
 | Company_ID | Quote_ID | Final_Price |
 ---------------------------------------
-   int            int      float
+   int            int        float
+   NOT_NULL      NOT_NULL    NOT_NULL 
    
 note_info
 ---------------------------------------
 | Company_ID | Quote_ID | Secret_Note |
 ---------------------------------------
-    int          int     varchar(1024) 
+    int          int     varchar(1023) 
+  NOT_NULL      NOT_NULL    NOT_NULL 
