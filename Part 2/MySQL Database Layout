@@ -10,10 +10,10 @@ Tables (assuming multiple quotes per company):
 ***NOTE: Quote_ID automatically increments, no need to assign a value.
 
 quote_info 
---------------------------------------------------------------------------------------------------------------------------------
-| Company_ID | Quote_ID | Company_Name | Company_City | Company_Street | Contact_Info | Email | Associate_Name | Date_of_Quote |
---------------------------------------------------------------------------------------------------------------------------------
-    int         int        varchar(255)  varchar(255)    varchar(255)    varchar(255)  varchar(255) varchar(255) varchar(255)
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Company_ID | Quote_ID | Company_Name | Company_City | Company_Street | Contact_Info | Email | Associate_Name | Date_of_Quote | Sanctioned |
+---------------------------------------------------------------------------------------------------------------------------------------------
+    int         int        varchar(255)  varchar(255)    varchar(255)    varchar(255)  varchar(255) varchar(255) varchar(255)  Boolean (0 = false)
     
 quote_item_info
 -------------------------------------------------------------------
