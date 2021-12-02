@@ -1,0 +1,28 @@
+(LEGACY DATABASE)
+----------------------------------------------------------------------------
+| Company ID | Company Name | Company City | Company Street | Contact Info |
+----------------------------------------------------------------------------
+
+Database = quote_database
+
+Tables (assuming multiple quotes per company):
+
+quote_info 
+--------------------------------------------------------------------------------------------------------------------------------
+| Company ID | Quote ID | Company Name | Company City | Company Street | Contact Info | Email | Associate Name | Date of Quote |
+--------------------------------------------------------------------------------------------------------------------------------
+
+quote_item_info
+-------------------------------------------------------------------
+| Company ID | Quote ID | Line ID | Item Description | Item Price |
+-------------------------------------------------------------------
+
+quote_final_price
+---------------------------------------
+| Company ID | Quote ID | Final Price |
+---------------------------------------
+
+note_info
+---------------------------------------
+| Company ID | Quote ID | Secret Note |
+---------------------------------------
