@@ -1,8 +1,12 @@
 <html>
 
-<h3>
+<style>
+    h2 {text-align: center;}
+</style>
+
+<h2>
     Quote Processing Page
-</h3>
+</h2>
 
 <body>
 
@@ -72,12 +76,23 @@
                 //Compute the Commission
                 $commission = round((int)substr($output['commission'], 0, strlen($output['commission'])) * $output['amount'] / 100, 2);
                 echo("Associate " . $output['associate'] . " earned $" . number_format($commission, 2) . "\r\n");
+                //Save the commission in the quote
                 $sql = "UPDATE quote_info SET Ordered=1, Commission=" . $commission . ", Process_Date='" . $output['processDay'] . "' WHERE id=" . $id;
                 if (mysqli_query($conn, $sql)) {
-                    echo "Comission updated successfully";
+                    echo "Comission updated successfully in quote";
                 } else {
                     echo "Error updating quote: " . mysqli_error($conn);
-                }           
+                }
+                
+                //Save the commission for the associate
+                $sql = "SELECT Total_Commission FROM associate_info WHERE Name=" . $output['associate'];
+                $sql_associate = mysqli_query($conn, $sql);
+                $sql = "UPDATE associate_info SET Total_Commission=" . ($sql_associate["Total_Commission"]+ $commission) . " WHERE Name=" . $output['associate'];
+                if (mysqli_query($conn, $sql)) {
+                    echo "Comission updated successfully in associate info";
+                } else {
+                    echo "Error updating quote: " . mysqli_error($conn);
+                }
 
                 //Send the Email
                 $to = $sql_quote_data["email"];
