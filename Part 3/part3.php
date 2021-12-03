@@ -23,7 +23,8 @@
         $dbname = "quote_database";
 
         // Create connection
-        $conn = mysqli_connect('blitz.cs.niu.edu', 'student', 'student', 'csci467', '3306');
+        //$conn = mysqli_connect('blitz.cs.niu.edu', 'student', 'student', 'csci467', '3306');
+        $conn = mysqli_connect($servername, $username, $password, $dbname);
         // Check connection
         if (!$conn) {
             die("Connection failed: " . mysqli_connect_error());
