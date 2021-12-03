@@ -39,3 +39,10 @@ associate_info
 ----------------------------------------------------------------
 | Name | User_ID | Password | Total_Commission | City | Street |
 ----------------------------------------------------------------
+varchar(255) int   varchar(255)    float    varchar(255) varchar(255)
+NOT_NULL  NOT_NULL   NOT_NULL    Default = 0  NOT_NULL   NOT_NULL
+
+
+ 
+ 
+ 
