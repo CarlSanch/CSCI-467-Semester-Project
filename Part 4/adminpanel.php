@@ -12,7 +12,7 @@
 	$errors = array();
 
 	// connect to database (servername, username, password, dbname)
-	$db = new mysqli_connect('localhost', 'root', '', 'quote_database');
+	$db = new mysqli('localhost', 'root', '', 'quote_database');
 	if ($db->connect_error){die("Connection failed: " . $db->connect_error);}
 	
 	// register associate data
@@ -26,42 +26,42 @@
 	// delete associate, otherwise update associate data
 	if(isset($_POST['Delete']) && $_POST['Delete'] == 'Yes')
 	{
-		$query = "REMOVE FROM associate_info WHERE User_ID = 'User_ID' LIMIT 1";
+		$query = "DELETE FROM associate_info WHERE User_ID = $User_ID";
 		mysqli_query($db,$query);
 	}
 	else
 	{
-		if(!empty($Name))
+		//if($Name != "")
 		{
-			$query = "UPDATE associate_info SET Name = '$Name' WHERE User_ID = 'User_ID' LIMIT 1";
+			$query = "UPDATE associate_info SET Name = $Name WHERE User_ID = $User_ID";
 			mysqli_query($db,$query);
 		}
 		if(!empty($Password))
 		{
-			$query = "UPDATE associate_info SET Password = '$Password' WHERE User_ID = 'User_ID' LIMIT 1";
+			$query = "UPDATE associate_info SET Password = $Password WHERE User_ID = $User_ID";
 			mysqli_query($db,$query);
 		}
 		if(!empty($Total_Commission))
 		{
-			$query = "UPDATE associate_info SET Total_Commission = '$Total_Commission' WHERE User_ID = 'User_ID' LIMIT 1";
+			$query = "UPDATE associate_info SET Total_Commission = $Total_Commission WHERE User_ID = $User_ID";
 			mysqli_query($db,$query);
 		}
 		if(!empty($City))
 		{
-			$query = "UPDATE associate_info SET City = '$Password' WHERE City = 'User_ID' LIMIT 1";
+			$query = "UPDATE associate_info SET City = $Password WHERE City = $User_ID";
 			mysqli_query($db,$query);
 		}
 		if(!empty($Street))
 		{
-			$query = "UPDATE associate_info SET Street = '$Street' WHERE User_ID = 'User_ID' LIMIT 1";
+			$query = "UPDATE associate_info SET Street = $Street WHERE User_ID = $User_ID";
 			mysqli_query($db,$query);
 		}
 	}
-?>
+/*?>
 
 <!-- register new user -->
 <?php
-	session_start();
+	session_start();*/
 	
 	// initialize variables
 	$username = "";
@@ -69,7 +69,7 @@
 	$errors = array();
 
 	// connect to database (servername, username, password, dbname)
-	$db = new mysqli_connect('localhost', 'root', '', 'quote_database');
+	$db = new mysqli('localhost', 'root', '', 'quote_database');
 	if ($db->connect_error){die("Connection failed: " . $db->connect_error);}
 	
 	// register users
@@ -81,7 +81,7 @@
 	if(empty($password)){array_push($errors, "Password is required");}
 
 	//check db for existing user with same username
-	$user_check_query = "SELECT * FROM associate_info WHERE User_ID = '$username' LIMIT 1";
+	$user_check_query = "SELECT * FROM associate_info WHERE User_ID = '$username'";
 
 	$results = mysqli_query($db, $user_check_query);
 	$user = mysqli_fetch_assoc($results);
@@ -127,14 +127,14 @@
 		// output data for each associate
 		while($row = $result->fetch_assoc())
 		{
-			echo "<tr><td>" . $row["Name"] . "</td><td>" . $row["User_ID"] . "</td><td>" . $row["Password"] . "</td><td>"
-				. $row["Total_Commission"] . "</td><td>" . $row["City"] . "</td><td>" . $row["Street"] . "</td></tr>";
+			echo "<tr><td>" . $row['Name'] . "</td><td>" . $row['User_ID'] . "</td><td>" . $row['Password'] . "</td><td>"
+				. $row['Total_Commission'] . "</td><td>" . $row['City'] . "</td><td>" . $row['Street'] . "</td></tr>";
 		}
 	}
 	echo "</table>";
 	
 	// display number of associates found
-	echo $result->num_rows . "associates found";
+	echo $result->num_rows . " associates found";
 ?>
 </div>
 <!-- form to edit associate -->
