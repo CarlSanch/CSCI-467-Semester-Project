@@ -8,11 +8,11 @@ Database = quote_database
 Tables (assuming multiple quotes per company):
 
 quote_info 
----------------------------------------------------------------------------------------------------------------------------------------------
-| Company_ID | Quote_ID | Company_Name | Company_City | Company_Street | Contact_Info | Email | Associate_Name | Date_of_Quote | Sanctioned |
----------------------------------------------------------------------------------------------------------------------------------------------
-    int         int        varchar(255)  varchar(255)    varchar(255)    varchar(255)  varchar(255) varchar(255) varchar(255)     Boolean 
-  NOT_NULL    NOT_NULL     NOT_NULL       NOT_NULL        NOT_NULL        NOT_NULL     NOT_NULL     NOT_NULL      NOT_NULL       DEFAULT = 0
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Company_ID | Quote_ID | Company_Name | Company_City | Company_Street | Contact_Info | Email | Associate_Name | Date_of_Quote | Sanctioned | Ordered | Commission | Process Date |
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    int         int        varchar(255)  varchar(255)    varchar(255)    varchar(255)  varchar(255) varchar(255) varchar(255)     boolean     boolean      float       varchar(255)
+  NOT_NULL    NOT_NULL     NOT_NULL       NOT_NULL        NOT_NULL        NOT_NULL     NOT_NULL     NOT_NULL      NOT_NULL      DEFAULT = 0  DEFAULT = 0  Default = 0  Default = 0
     
 quote_item_info
 -------------------------------------------------------------------
@@ -34,3 +34,8 @@ note_info
 ---------------------------------------
     int          int     varchar(1023) 
   NOT_NULL      NOT_NULL    NOT_NULL 
+
+associate_info
+----------------------------------------------------------------
+| Name | User_ID | Password | Total_Commission | City | Street |
+----------------------------------------------------------------
