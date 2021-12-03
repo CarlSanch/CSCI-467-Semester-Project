@@ -18,9 +18,9 @@
     //Retrieve Data from the database
     
         $servername = "localhost";
-        $username = "username";
-        $password = "password";
-        $dbname = "myDB";
+        $username = "geads";
+        $password = "geads";
+        $dbname = "quote_database";
 
         // Create connection
         $conn = mysqli_connect($servername, $username, $password, $dbname);
@@ -29,19 +29,21 @@
             die("Connection failed: " . mysqli_connect_error());
         }
 
-        $sql = "SELECT company_id, quote_id, email, associate_name FROM quote_info WHERE quote_id=" . $id;
+        $sql = "SELECT Company_ID, Quote_ID, Email, Associate_Name FROM quote_info WHERE Quote_ID=" . $order;
         $sql_quote_data = mysqli_query($conn, $sql);
 
-        $sql = "SELECT quote_id, final_price FROM quote_final_price WHERE quote_id=" . $id;
+        $sql = "SELECT Quote_ID, Final_Price FROM quote_final_price WHERE Quote_ID=" . $order;
         $sql_quote_price = mysqli_query($conn, $sql);
 
         //Each quote value should be unique
         if ($sql_quote_data->num_rows == 1 && $sql_quote_price->num_rows == 1) {
             //Quote was found, we may process it.
-            $order = $sql_quote_data["quote_id"];
-            $associate = $sql_quote_data["associate_name"];
-            $id = $sql_quote_data["company_id"];
-            $amount = $sql_quote_price["final_price"] - $discount;
+            $sql_quote_data = $sql_quote_data->fetch_assoc();
+            $sql_quote_price = $sql_quote_price->fetch_assoc();
+            $order = $sql_quote_data["Quote_ID"];
+            $associate = $sql_quote_data["Associate_Name"];
+            $id = $sql_quote_data["Company_ID"];
+            $amount = $sql_quote_price["Final_Price"] - $discount;
 
             //Send to processing system
             $data = array(
@@ -66,64 +68,69 @@
             if( !array_key_exists('errors', $output) ){
  
                 //Update the final price
-                $sql = "UPDATE quote_final_price SET quote_price=" . $amount . " WHERE id=" . $id;
+                $sql = "UPDATE quote_final_price SET Final_Price=" . $amount . " WHERE Quote_ID=" . $order;
                 if (mysqli_query($conn, $sql)) {
-                    echo "Quote price updated successfully";
+                    echo "Quote price updated successfully". "<br>";
                 } else {
-                    echo "Error updating quote: " . mysqli_error($conn);
+                    echo "Error updating quote: " . mysqli_error($conn). "<br>";
                 }
 
                 //Compute the Commission
                 $commission = round((int)substr($output['commission'], 0, strlen($output['commission'])) * $output['amount'] / 100, 2);
-                echo("Associate " . $output['associate'] . " earned $" . number_format($commission, 2) . "\r\n");
-                //Save the commission in the quote
-                $sql = "UPDATE quote_info SET Ordered=1, Commission=" . $commission . ", Process_Date='" . $output['processDay'] . "' WHERE id=" . $id;
-                if (mysqli_query($conn, $sql)) {
-                    echo "Comission updated successfully in quote";
-                } else {
-                    echo "Error updating quote: " . mysqli_error($conn);
-                }
-                
-                //Save the commission for the associate
-                $sql = "SELECT Total_Commission FROM associate_info WHERE Name=" . $output['associate'];
+                echo("Associate " . $output['associate'] . " earned $" . number_format($commission, 2) . "<br>");
+
+                //Save the commission in the quote  
                 $sql_associate = mysqli_query($conn, $sql);
-                $sql = "UPDATE associate_info SET Total_Commission=" . ($sql_associate["Total_Commission"]+ $commission) . " WHERE Name=" . $output['associate'];
+                $sql = "UPDATE quote_info SET Ordered=1, Comission=" . $commission . ", Process_Date='" . $output['processDay'] . "' WHERE Quote_ID=" . $order;
                 if (mysqli_query($conn, $sql)) {
-                    echo "Comission updated successfully in associate info";
+                    echo "Comission updated successfully in quote". "<br>";
                 } else {
-                    echo "Error updating quote: " . mysqli_error($conn);
+                    echo "Error updating quote: " . mysqli_error($conn). "<br>";
+                }
+
+                //Save the commission for the associate
+                $sql = "SELECT Total_Commission FROM associate_info WHERE Name='" . $output['associate'] . "'";
+                $sql_associate = mysqli_query($conn, $sql);
+                $sql_associate = $sql_associate->fetch_assoc();
+                $sql = "UPDATE associate_info SET Total_Commission=" . $sql_associate["Total_Commission"] + $commission . " WHERE Name='" . $output['associate'] . "'";
+                if (mysqli_query($conn, $sql)) {
+                    echo "Comission updated successfully in associate info". "<br>";
+                } else {
+                    echo "Error updating comission: " . mysqli_error($conn). "<br>";
                 }
 
                 //Send the Email
-                $to = $sql_quote_data["email"];
+                $to = $sql_quote_data["Email"];
                 $subject = "Order " . $output['order'] . "has been processed";
                         
-                $message = ("Your order #" . $output['order'] . " for $" . $output['amount'] . " has been processed on " . $output['processDay'] . "\r\n");
-                echo($message);
+                $message = ("Your order #" . $output['order'] . " for $" . $output['amount'] . " has been processed on " . $output['processDay'] . "<br>");
+                
                         
-                $header = "From:abc@somedomain.com \r\n";
+                $header = "From:processingsystem@company.com \r\n";
                 $header .= "Content-type: text/html\r\n";
                         
                 $retval = mail ($to,$subject,$message,$header);
                         
                 if( $retval == true ) {
-                    echo "Email sent successfully to " . $to . ".";
+                    echo "Email sent successfully to " . $to . ".". "<br>";
+                    echo "Message:" . "<br>";
+                    echo($message. "\r\n");
                 }
                 else {
-                    echo "Email failed to send to " . $to . ".";
+                    echo "Email failed to send to " . $to . ".". "<br>";
                 }
             }
             //Cancel processing, the system returned an error
             else{
-                echo "Transaction was not processed due to:";
+                echo "Transaction was not processed due to:". "<br>";
                 foreach($output['errors'] as $error) {
-                    echo " " . $error;
+                    echo " " . $error. "<br>";
                 }
             }
         }
         //The quote was not found in the database
         else {
-            die("Error: quote #". $id . " not found.");
+            die("Error: quote #". $order . " not found.". "<br>");
         }
 ?>
 
