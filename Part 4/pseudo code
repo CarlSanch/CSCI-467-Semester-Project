@@ -1,0 +1,88 @@
+Youtube Tutorial: https://www.youtube.com/watch?v=xTHJ4gGycb0&list=PL0glhsZ01I-ByO06sYyCSYrPYVAb1Wzkw&index=14&ab_channel=JustinStolpe
+
+Create column user_level default 0
+1 = admin
+if admin == 1 then can use admin panel
+
+copy signup.php and rename to adminpanel.php
+go into css folder, copy signup.css and rename to adminpanel.php
+
+In index.php below:
+			<?php if ( isLoggedIn() ) : ?>
+Add:
+				// if user is admin, add admin panel
+				<?php if ( isAdmin() ) : ?>
+					<div>
+						<a class="a-default" href="adminpanel.php">Admin Panel</a>
+					</div>
+				<?php endif; ?>
+
+In functions.php add:
+	// USER_LEVEL_ADMIN = 1
+	define( 'USER_LEVEL_ADMIN', '1' );
+...
+	// check if user is admin
+	function isAdmin()
+	{
+		if ( isset( $_SESSION['user_info'] ) && $_SESSION['user_info'] &&
+			USER_LEVEL_ADMIN == $_SESSION['user_info']['user_level'] )
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+In adminpanel.php below:
+	include_once 'autoloader.php';
+Add:
+	// if user is not admin, redirect user to index page
+	if ( !isAdmin() ) {
+		header( 'location: index.php' );
+	}
+
+In adminpanel.php change:
+		<title>Easy, Code Is</title>
+To:
+		<title>Easy, Code Is | Admin Panel</title>
+
+In adminpanel.php change:
+		<link href="css/home.css" rel="stylesheet" type="text/css">
+To:
+		<link href="css/adminpanel.css" rel="stylesheet" type="text/css">
+
+In adminpanel.php remove (you don't need all this signup stuff on the admin panel):
+				$( '#load_test' ).on( 'click', function() { // on click for our load test link
+					// show our loading overlay
+					loader.showLoader();
+
+					setInterval( function() { // after 3 seconds, hide our loading overlay
+						loader.hideLoader();
+					}, 3000 );
+				} );
+
+				$( '#logout_link' ).on( 'click', function() { // on click for our logout link
+					// show our loading overlay
+					loader.showLoader();
+
+					// server side logout
+					$.ajax( {
+						url: 'php/process_logout.php',
+						type: 'post',
+						dataType: 'json',
+						success: function( data ) {
+							loader.hideLoader();
+							window.location.href = "index.php";
+						}
+					} );
+				} );
+
+In adminpanel.php below:
+					<div class="site-content-section-inner">
+Add:
+						// display admin panel and user full name
+						<div class="section-heading">Admin Panel</div>
+						<div class="admin-sub-heading">Logged in as <?php echo $_SESSION['user_info']['first_name'];
+						?> <?php echo $_SESSION['user_info']['last_name']; ?></div>
