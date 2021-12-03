@@ -23,7 +23,7 @@
         $dbname = "quote_database";
 
         // Create connection
-        $conn = mysqli_connect($servername, $username, $password, $dbname);
+        $conn = mysqli_connect('blitz.cs.niu.edu', 'student', 'student', 'csci467', '3306');
         // Check connection
         if (!$conn) {
             die("Connection failed: " . mysqli_connect_error());
@@ -81,7 +81,7 @@
 
                 //Save the commission in the quote  
                 $sql_associate = mysqli_query($conn, $sql);
-                $sql = "UPDATE quote_info SET Ordered=1, Comission=" . $commission . ", Process_Date='" . $output['processDay'] . "' WHERE Quote_ID=" . $order;
+                $sql = "UPDATE quote_info SET Ordered=1, Commission=" . $commission . ", Process_Date='" . $output['processDay'] . "' WHERE Quote_ID=" . $order;
                 if (mysqli_query($conn, $sql)) {
                     echo "Comission updated successfully in quote". "<br>";
                 } else {
@@ -96,7 +96,7 @@
                 if (mysqli_query($conn, $sql)) {
                     echo "Comission updated successfully in associate info". "<br>";
                 } else {
-                    echo "Error updating comission: " . mysqli_error($conn). "<br>";
+                    echo "Error updating commission: " . mysqli_error($conn). "<br>";
                 }
 
                 //Send the Email
