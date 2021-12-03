@@ -3,7 +3,6 @@
 	session_start();
 	
 	// initialize variables
-	$UPDATE_User_ID = $_SESSION['UPDATE_User_ID'];
 	$Name = "";
 	$User_ID = "";
 	$Password = "";
@@ -24,52 +23,39 @@
 	$City = mysqli_real_escape_string($db, $_POST['City']);
 	$Street = mysqli_real_escape_string($db, $_POST['Street']);
 	
-	// update associates
-	if(!empty($Name))
+	// delete associate, otherwise update associate data
+	if(isset($_POST['Delete']) && $_POST['Delete'] == 'Yes')
 	{
-		$query = "UPDATE associate_info SET Name = '$Name' WHERE User_ID = 'UPDATE_User_ID' LIMIT 1";
+		$query = "REMOVE FROM associate_info WHERE User_ID = 'User_ID' LIMIT 1";
 		mysqli_query($db,$query);
 	}
-	if(!empty($User_ID))
+	else
 	{
-		// check db for existing associate with same User ID
-		$user_check_query = "SELECT * FROM associate_info WHERE User_ID = '$User_ID' LIMIT 1";
-		$results = mysqli_query($db, $user_check_query);
-		$user = mysqli_fetch_assoc($results);
-		
-		if($user)
+		if(!empty($Name))
 		{
-			// update if no match found
-			if ($user['User_ID'] == $User_ID)
-			{
-				array_push($errors, "User ID already exists");
-			}
-			else
-			{
-				$query = "UPDATE associate_info SET User_ID = '$User_ID' WHERE User_ID = 'UPDATE_User_ID' LIMIT 1";
-				mysqli_query($db,$query);
-			}
+			$query = "UPDATE associate_info SET Name = '$Name' WHERE User_ID = 'User_ID' LIMIT 1";
+			mysqli_query($db,$query);
 		}
-	}
-	if(!empty($Password))
-	{
-		$query = "UPDATE associate_info SET Password = '$Password' WHERE User_ID = 'UPDATE_User_ID' LIMIT 1";
-		mysqli_query($db,$query);
-	}
-	if(!empty($Total_Commission))
-	{
-		$query = "UPDATE associate_info SET Total_Commission = '$Total_Commission' WHERE User_ID = 'UPDATE_User_ID' LIMIT 1";
-		mysqli_query($db,$query);
-	}
-	if(!empty($City))
-	{
-		$query = "UPDATE associate_info SET City = '$Password' WHERE City = 'UPDATE_User_ID' LIMIT 1";
-		mysqli_query($db,$query);
-	}
-	if(!empty($Street))
-	{
-		$query = "UPDATE associate_info SET Street = '$Street' WHERE User_ID = 'UPDATE_User_ID' LIMIT 1";
-		mysqli_query($db,$query);
+		if(!empty($Password))
+		{
+			$query = "UPDATE associate_info SET Password = '$Password' WHERE User_ID = 'User_ID' LIMIT 1";
+			mysqli_query($db,$query);
+		}
+		if(!empty($Total_Commission))
+		{
+			$query = "UPDATE associate_info SET Total_Commission = '$Total_Commission' WHERE User_ID = 'User_ID' LIMIT 1";
+			mysqli_query($db,$query);
+		}
+		if(!empty($City))
+		{
+			$query = "UPDATE associate_info SET City = '$Password' WHERE City = 'User_ID' LIMIT 1";
+			mysqli_query($db,$query);
+		}
+		if(!empty($Street))
+		{
+			$query = "UPDATE associate_info SET Street = '$Street' WHERE User_ID = 'User_ID' LIMIT 1";
+			mysqli_query($db,$query);
+		}
 	}
 ?>
 
@@ -91,7 +77,7 @@
 	$password = mysqli_real_escape_string($db, $_POST['password']);
 	
 	// form validation
-	if(empty($username)){array_push($errors, "Username is required");}
+	if(empty($username)){array_push($errors, "User ID is required");}
 	if(empty($password)){array_push($errors, "Password is required");}
 
 	//check db for existing user with same username
@@ -120,56 +106,58 @@
 <html>
 <body>
 <!-- links to other pages -->
-<a href="associates.php">Associates</a>
-<a href="quotes.php">Quotes</a>
-
+<div>
+	<a href="quoteview.php">Quotes</a>
+</div>
 <!-- Display Sales Associates-->
-<b>Our Sales Associates</b>
+<div>
+	<b>Our Sales Associates:</b>
+</div>
+<div>
 <?php	
 	// get associates from database
-	$sql = "SELECT Name, User_ID, Total_Commission FROM associate_info";
+	$sql = "SELECT * FROM associate_info";
 	$result = $db->query($sql);
 	
+	// create a table
+	echo "<table><tr><td>Name</td><td>User ID</td><td>Password</td><td>Total Commission</td><td>City</td><td>Street</td></tr>";
 	// go through each associate
 	if($result->num_rows > 0 )
 	{
+		// output data for each associate
 		while($row = $result->fetch_assoc())
 		{
-			$_SESSION['UPDATE_User_ID'] = $row["User_ID"];
-			// output data for each associate
-			echo "Name: " . $row["Name"] . " - User ID: " . $row["User_ID"] . " - Total Commission: " . $row["Total_Commission"] . " - City: " . $row["City"] . " - Street: " . $row["Street"] . "<br>";
-			
-			// form for each associate
-			?>
-				<div>
-					<!-- form to edit data -->
-					<form action="adminpanel.php" method="post">
-						Name: <input type="text" name="Name">
-						User ID: <input type="text" name="User ID">
-						Password: <input type="text" name="Password">
-						Total Commission: <input type="text" name="Total_Commission">
-						City: <input type="text" name="City">
-						Street: <input type="text" name="Street">
-						<button type="submit" name="edit_user">Edit</button>
-					</form>
-					<!-- button to delete associate -->
-					<form action="adminpanel.php" method="post">
-						<button type="submit" name="delete_user">Delete</button>
-					</form>
-				</div>
-			<?php
+			echo "<tr><td>" . $row["Name"] . "</td><td>" . $row["User_ID"] . "</td><td>" . $row["Password"] . "</td><td>"
+				. $row["Total_Commission"] . "</td><td>" . $row["City"] . "</td><td>" . $row["Street"] . "</td></tr>";
 		}
 	}
+	echo "</table>";
 	
 	// display number of associates found
 	echo $result->num_rows . "associates found";
 ?>
-
-<!-- form to add new associate -->
-<form action="adminpanel.php" method="post">
-	User ID: <input type="text" name="username" required>
-	Password: <input type="text" name="password" required>
-	<button type="submit" name="register_user">Add new associate</button>
-</form>
+</div>
+<!-- form to edit associate -->
+<div>
+	<!-- form to edit data -->
+	<form action="adminpanel.php" method="post">
+		Name: <input type="text" name="Name">
+		User ID: <input type="text" name="User ID" required>
+		Password: <input type="text" name="Password">
+		Total Commission: <input type="text" name="Total_Commission">
+		City: <input type="text" name="City">
+		Street: <input type="text" name="Street">
+		Delete: <input type="checkbox" name="Delete" value="Yes">
+		<button type="submit" name="edit_user">Edit Associate</button>
+	</form>
+</div>
+<!-- form to add associate -->
+<div>
+	<form action="adminpanel.php" method="post">
+		User ID: <input type="text" name="username" required>
+		Password: <input type="text" name="password" required>
+		<button type="submit" name="register_user">Add Associate</button>
+	</form>
+</div>
 </body>
 </html>
