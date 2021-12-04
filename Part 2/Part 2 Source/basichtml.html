@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script>
+		function hideQuotes() {
+			document.getElementById("quote 1").style.display = "none";
+            document.getElementById("quote 2").style.display = "none";
+        }
+		function selectQuote() {
+			var dropdownQuote = document.getElementById("quoteDrop");
+			var selected = dropdownQuote.value;
+			var showQuote = document.getElementById(selected);
+			showQuote.style.display = "block";
+		}
+		function quoteHandler() {
+			hideQuotes();
+			selectQuote();
+		}
+		function addLine() {
+			var currentLine = document.getElementById("newItem");
+            var newLine = '<tr><td><textarea name="item[]" class="textboxes"></textarea></td><td><textarea name="price[]" class="textboxes" onfocusout="updateFinal(this)" onfocus="subFinal(this)"></textarea></td><td><button type="button" onclick="removeLine(this)">Remove Item</button></td></tr>';
+			currentLine.insertAdjacentHTML('beforebegin', newLine);
+		}
+		function removeLine(e) {
+            subFinal(e.parentElement.previousElementSibling.firstElementChild);
+			e.parentElement.parentElement.remove();		
+		}
+		function removeNoteLine(e) {
+            e.parentElement.parentElement.remove();
+        }
+		function addNote() {
+            var currentLine = document.getElementById("newNote");
+            var newLine = '<tr><td><textarea name="note[]" class="textboxes"></textarea></td><td><button type="button" onclick="removeNoteLine(this)">Remove Note</button></td></tr>';
+            currentLine.insertAdjacentHTML('beforebegin', newLine);
+		}
+		function calculateDiscount() {
+			//document.getElementById("finalPrice").innerText = "a";
+			var finalPriceElement = document.getElementById("finalPrice");
+			var finalPrice = finalPriceElement.value;
+			var finalPriceArray = finalPrice.split(" ");
+			var price = 0;
+			if (Number.isInteger(finalPriceArray[2]) == true) {
+				price = parseInt(finalPriceArray[2], 10);
+			}
+			else {
+                price = parseFloat(finalPriceArray[2], 10);
+            }
+			//document.write(price.toString());
+			var discount = document.getElementById("discounted").value;
+			//document.write(discount.toString());
+            var radios = document.getElementsByName('typeOfDiscount');
+			if (radios[0].checked) {
+				price = price - (price * (discount / 100));
+				price = price.toFixed(2);
+                finalPriceElement.value = "Final Price: " + price;
+			}
+			else {
+				price = price - discount;
+                price = price.toFixed(2);
+                finalPriceElement.value = "Final Price: " + price;
+            }
+		
+		}
+
+		function updateFinal(e) {
+			//document.write("yoooo");
+            var finalPriceElement = document.getElementById("finalPrice");
+            var finalPrice = finalPriceElement.value;
+            var finalPriceArray = finalPrice.split(" ");
+            var price = 0;
+            if (Number.isInteger(finalPriceArray[2]) == true) {
+                price = parseInt(finalPriceArray[2], 10);
+            }
+            else {
+                price = parseFloat(finalPriceArray[2], 10);
+			}
+			//var newCost = e.innerText;
+			var newCost = e.value;
+			//document.write(newCost);
+			var cost = 0;
+            if (Number.isInteger(newCost) == true) {
+                cost = parseInt(newCost, 10);
+            }
+            else {
+                cost = parseFloat(newCost, 10);
+			}
+			price = price + cost;
+            price = price.toFixed(2);
+            finalPriceElement.value = "Final Price: " + price;
+		}
+
+		function subFinal(e) {
+            var finalPriceElement = document.getElementById("finalPrice");
+            var finalPrice = finalPriceElement.value;
+            var finalPriceArray = finalPrice.split(" ");
+            var price = 0;
+            if (Number.isInteger(finalPriceArray[2]) == true) {
+                price = parseInt(finalPriceArray[2], 10);
+            }
+            else {
+                price = parseFloat(finalPriceArray[2], 10);
+            }
+            //var newCost = e.innerText;
+			var newCost = e.value;
+			if (Number(newCost) == false) {
+				return;
+				//break;
+            }
+            //document.write(newCost);
+            var cost = 0;
+            if (Number.isInteger(newCost) == true) {
+                cost = parseInt(newCost, 10);
+            }
+            else {
+                cost = parseFloat(newCost, 10);
+            }
+            price = price - cost;
+            price = price.toFixed(2);
+            finalPriceElement.value = "Final Price: " + price;
+        }
+
+	</script>
+	<link rel="stylesheet" href="basicCss.css">
+	<title> Quote Modification System </title>
+</head>
+<body>
+	<h1> Quote Modification System </h1>
+	<!--Start of the Discount Table-->
+	<table class="button-table">
+		<tr class="button-tr">
+			<td class="text-td"><h3>Discount:</h3></td>
+		</tr>
+		<tr class="button-tr">
+			<td class="discount"><input type="number" id="discounted"><br></td>
+		</tr>
+		<tr class="button-tr">
+			<td class="button-tr"><button type="button" class="flex-button" onclick="calculateDiscount()">Apply Discount</button></td>
+		</tr>
+		<tr><td class="flex-radio"><label for="pct">Percent <input type="radio" name="typeOfDiscount" value="percent" id="pct" class="flex-radio" checked/></label></td></tr>
+		<tr><td class="flex-radio"><label for="amt">Amount<input type="radio" name="typeOfDiscount" value="amount" id="amt" class="flex-radio" /></label></td></tr>
+		<tr class="blank-row">
+			<td class="blank-column"></td>
+		</tr>
+	</table>
+	<!--End of the Discount Table-->
+	<!--Start of Quote Dropdown List-->
+	<form action="grab_quote_table.php" method="post">
+		<select id="quoteDrop" name="quoten" onchange="this.form.submit()">
+			<option value="0" selected disabled hidden>Select a Quote</option>
+			<?php
+			$dbhost = 'enter host here (localhost for local servers)';
+			$dbuser = 'root (select a database user. Root has access to everything usually)';
+			$dbpass = 'Enter the password for the selected user';
+			$dbname = 'Enter the name of your database here';
+			$mysqli = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+
+			if($mysqli->connect_errno ) {
+			printf("Connect failed: %s
+			<br />", $mysqli->connect_error);
+			exit();
+			}
+			printf('Connected successfully.
+			<br />');
+
+			$data = "SELECT Company_ID, Quote_ID, Date_of_Quote, Associate_Name, Company_Name FROM quote_info";
+			$quote_data = $mysqli->query($data);
+
+			if($quote_data->num_rows > 0)
+			{
+			while($row = $quote_data->fetch_assoc())
+			{
+			echo "
+			<option value='" . $row[' Company_ID'] . "-" . $row['Quote_ID'] . "'>" .
+					$row['Company_ID'] . "-" . $row['Quote_ID'] . " " . $row['Date_of_Quote'] . " " .
+					$row['Associate_Name'] . " " . $row['Company_Name'] . "</option>" ;
+					}
+					}
+					$mysqli->
+				close();
+				?>
+				<!--<option value="quote 1">Quote 1</option>
+		<option value="quote 2">Quote 2</option>
+		<option value="quote 3">Quote 3</option>-->
+		</select>
+	</form>
+	<!--End of Quote Dropdown List-->
+	<!--Start of the Quotes Data List OLD TEST TABLES DELETE LATER
+	<table id="quote 1">
+		<tr>
+			<th>Item</th>
+			<th>Description</th>
+			<th>Price</th>
+			<th><select id="noteDrop" name="noteDrop1" class="flex-button">
+				<option value="0">Edit Note(s)</option>
+				<option value="Note 1">Note 1</option>
+				<option value="Note 2">Note 2</option>
+				<option value="Note 3">Note 3</option>
+				<option value="Note 4">New Note</option>
+			</select></th>
+		</tr>
+		<tr>
+			<td contenteditable="true">1</td>
+			<td contenteditable="true">Item 1</td>
+			<td contenteditable="true">$99.94</td>
+			<td contenteditable="true"></td>
+		</tr>
+		<tr>
+			<td>2</td>
+			<td>Item TWO</td>
+			<td>$777.77</td>
+		</tr>
+		<tr>
+			<td>999999999999999</td>
+			<td>The third item but it has a lot of text just to test what would happen if there was an overflow.</td>
+			<td>$5462546.99</td>
+		</tr>
+		<tr>
+			<td><button type="button">New Item Line</button></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="price-text">Final Price:</td>
+			<td class="no-border">$9864.78</td>
+			<td><button type="button" class="h3">Sanction Quote</button></td>
+		</tr>
+	</table>
+	<table id="quote 2">
+		<tr>
+			<th>Item</th>
+			<th>Description</th>
+			<th>Price</th>
+			<th>
+				<select id="noteDrop" name="noteDrop2" class="flex-button">
+					<option value="0">Edit Note(s)</option>
+					<option value="Note 1">Note 1</option>
+					<option value="Note 2">Note 2</option>
+					<option value="Note 3">Note 3</option>
+					<option value="Note 4">New Note</option>
+				</select>
+			</th>
+		</tr>
+		<tr>
+			<td contenteditable="true">345</td>
+			<td contenteditable="true">itemitem</td>
+			<td contenteditable="true">$92354.34</td>
+			<td contenteditable="true">texttexttext</td>
+		</tr>
+		<tr>
+			<td>2</td>
+			<td>Item TWO</td>
+			<td>$987</td>
+			<td>The second item. wow</td>
+		</tr>
+		<tr>
+			<td>9999923452345</td>
+			<td>The third itemasdjfsadfjasfjasd;fjkasdfjasdfs.</td>
+			<td>$2.99</td>
+			<td>ahuewifjagnoadisgjnoadsignosdfbdfgzdbvzdfbzdfbzdfbiuadjgndgasefasfafasdfadfadsfasdfadsfasf</td>
+		</tr>
+		<tr>
+			<td>4</td>
+			<td>fourth item</td>
+			<td>$765</td>
+			<td>adjifasjkfafasaf</td>
+		</tr>
+		<tr>
+			<td><button type="button">New Item</button></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="no-border"></td>
+			<td class="price-text">Final Price:</td>
+			<td class="no-border">$9864.78</td>
+			<td><button type="button" class="h3">Sanction Quote</button></td>
+		</tr>
+	</table>
+	End of the Quotes Data List-->
+	<!--</div>-->
+</body>
+</html>

@@ -1,0 +1,214 @@
+body 
+{
+	background-color: white;
+}
+
+h1
+{
+	text-align: center;
+	background-color: lightblue;
+	color: white;
+}
+table
+{
+	float:left;
+	//padding-left:300px;
+	//table-layout: auto;
+	font-size:26px;
+	width:50%;	
+	border-collapse:collapse;
+	//white-space: wrap;
+}
+.button-table {
+	float: left;
+	//padding-left:300px;
+	//table-layout: auto;
+	font-size: 26px;
+	width: 20%;
+	border-collapse: collapse;
+	display:inline-table;
+	//white-space: wrap;
+}
+.button-td {
+	overflow-wrap: anywhere;
+	height: 100%;
+	width: 100%;
+	border:none;
+	padding-right:80px;
+	min-block-size:120px;
+}
+.button-tr {
+	overflow-wrap: anywhere;
+	padding-right: 80px;
+	border: none;
+}
+.button-tr:hover{
+	background: #FFFFFF;
+}
+tr:hover
+{
+	
+}
+td:hover {
+	background: #F4F4F4;
+}
+th
+{
+	border:2px solid black;
+	overflow-wrap: anywhere;
+	background: #CCCCCC;
+}
+td
+{
+	border:1px solid black;
+	overflow-wrap: anywhere;
+	height:100%;
+	min-width:120px;
+}
+button 
+{
+	width: 100%;
+	height: 100%;
+	font-size: 26px;
+	border: none;
+}
+button:hover 
+{
+	background: #DDDDDD;
+}
+input
+{
+	width:100%;
+	height:100%;
+	font-size:26px;
+}
+.textboxes {
+	width: 90%;
+	height: 90%;
+	font-size: 24px;
+}
+.flex-button {
+	flex-grow: 1;
+	font-size: 24px;
+	width: 100%;
+	height: 100%;
+	border: none;
+	min-block-size: 100px;
+	overflow-wrap: anywhere;
+	padding-right:20px;
+}
+.flex-radio {	
+	font-size: 24px;
+	width: 50%;
+	height: 50%;
+	border: none;
+	min-block-size: 10px;
+	overflow-wrap: anywhere;
+	padding-right: 40px;
+}
+.flex-button:hover 
+{
+	background: #DDDDDD;
+}
+.container
+{
+	display:flex;
+}
+h3
+{
+	text-align:center;
+	font-size:24px;
+	border:none;
+}
+h4
+{
+	text-align:left;
+	font-size:26px;
+	padding:0px;
+	margin:0px;
+	color: #1188FF;
+}
+h5 {
+	text-align: left;
+	font-size: 20px;
+	padding: 0px;
+	margin: 0px;
+}
+.text-td {
+	overflow-wrap: anywhere;
+	height: 100%;
+	border: none;
+	padding-right: 80px;
+}
+.text-td:hover {
+	background-color:#ffffff;
+}
+.discount {
+	overflow-wrap: anywhere;
+	padding-right: 88px;
+	border: none;
+	text-align:center;
+}
+.discount:hover {
+	background-color:#ffffff;
+}
+select{
+	overflow-wrap:anywhere;
+	width:80%;
+	font-size:20px;
+	float:right;
+	margin-bottom:20px;
+}
+.no-border {
+	border: none;
+}
+.price-text {
+	text-align: center;
+	border: 0px solid black;
+	overflow-wrap: anywhere;
+	height: 100%;
+	min-width: 120px;
+}
+.note-td {
+	border: 0px solid black;
+	overflow-wrap: anywhere;
+	height: 100%;
+	min-width: 120px;
+}
+.blank-column {
+	height: 1000000px;
+	padding-right: 88px;
+	border: none;
+}
+
+.blank-column:hover 
+{
+	background-color: #ffffff;
+	color: #ffffff;
+}
+
+.blank-row 
+{
+	border: none;
+}
+
+.blank-row:hover
+{
+	color: #ffffff;
+}
+.inline-table{
+	display:inline-block;
+}
+.minimum_row_size{
+	
+}
+.center_text{
+	text-align:center;
+}
+label{
+	display:block;
+	text-align:left;
+}
+.empty{
+
+}
