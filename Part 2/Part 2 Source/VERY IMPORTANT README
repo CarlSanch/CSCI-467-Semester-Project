@@ -1,3 +1,0 @@
-To begin using, run the index.php in a web server of your choice and connect to "http://localhost:8000" (usually). 
-NOTE: Modified quotes do not yet set the sanctioned flag and an email of the quote is not sent out currently. Other than that, most features should be intact. 
-Make sure to carefully fill in info, or else the final price may break if there are ANY non-numeric characters in price slots.
