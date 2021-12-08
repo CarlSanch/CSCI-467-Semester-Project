@@ -1,5 +1,5 @@
 <?php
-function runQUpdate(){
+function quoteUpdate(){
     $link = dbConnect();
     $lineItem = $_POST['lineItemTxt'];
     $Note = $_POST['Note'];
