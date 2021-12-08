@@ -5,21 +5,21 @@
         <style>
             div {
                 border: 1px solid black;
-                width: 600px;
-                height: 600px;
+                width: 450px;
+                height: 450px;
                 overflow: auto;
             }
         </style>
     </head>
     <body bgcolor = "#00FA9A">
         <?php
-            include('CustomerReviseQuotes.php');
+            include('CustomerReviseQuote.php');
             include('QuoteCreator.php');
             createNewQuote();
             $newQuote = array($_POST['lineItemTxt'], $_POST['Note'], $_POST['Price'], $_POST['Discounts'], $_POST['custID']);
-            createNewQuoteControl($newQuote);
+            newQuoteCreation($newQuote);
 
-function createNewQuote()
+function newQuoteCreation()
 {
     if($custLink = mysqli_connect('blitz.cs.niu.edu', 'student', 'student', 'csci467', '3306')){
 
