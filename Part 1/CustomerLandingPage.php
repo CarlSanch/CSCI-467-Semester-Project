@@ -4,8 +4,8 @@
             table.buttons
 		 {
                 	position: relative;
-                	left: 250px;
-                	top: 10px
+                	left: 200px;
+                	top: 20px
 		}
 		 body{
 		 background:#7bd19c;
@@ -41,7 +41,7 @@
 
     <body bgcolor = "#00FA9A">
     <center>
-    <!--Quote entry form-->
+    <!--Quote form-->
     <?php
     include 'CustomerCreateQuote.php';
     defaultDisplay();
