@@ -10,7 +10,7 @@
 
 	if ($_POST['Update'] == "Update")
 	{
-            runQUpdate();
+            quoteUpdate();
 	}
 	else
        	{
